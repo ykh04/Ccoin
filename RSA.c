@@ -1,6 +1,7 @@
+//2022 ykh04
 #include <stdio.h>
 #include <stdlib.h>
-#include <gmp.h>
+#include <gmp.h> /*dll link*/
 #include <time.h>
 #include <unistd.h>
 
@@ -19,8 +20,8 @@ void RSAGen(mpz_t *publickey, mpz_t *privatekey, mpz_t *keyCase)
 
     mpz_set_str(gcdi, "1", 16);
 
-    primeGen((mpz_t *)&p, 256, 0, p/*“K“–*/);
-    primeGen((mpz_t *)&q, 256, 0, p/*“K“–*/);
+    primeGen((mpz_t *)&p, 256, 0, p/*â€œKâ€œâ€“*/);
+    primeGen((mpz_t *)&q, 256, 0, p/*â€œKâ€œâ€“*/);
     mpz_mul(*keyCase, p, q);
     mpz_sub_ui(p, p, 1);
     mpz_sub_ui(q, q, 1);

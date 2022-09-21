@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     SOCKET srvSock, lstnRecvSock;
     WSADATA wsaData;
 
-    // winsock2の初期化
+    /*winsock2の初期化*/
     WSAStartup(MAKEWORD(2,0), &wsaData);
 
     /* ソケットの作成 */
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     /* socketの終了 */
 
     closesocket(srvSock);
-    // winsock2の終了
+    /*winsock2の終了*/
     WSACleanup();
 
     return 0;

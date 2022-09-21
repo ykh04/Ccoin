@@ -1,4 +1,4 @@
-
+//2022 ykh04
 #define	WINSOCK_USE		2.0		/* Only 32bit library */
 
 
@@ -24,10 +24,10 @@ int main(int argc, char *argv[])
     SOCKET srvSock, lstnRecvSock;
     WSADATA wsaData;
 
-    // winsock2‚Ì‰Šú‰»
+    // winsock2ã®åˆæœŸåŒ–
     WSAStartup(MAKEWORD(2,0), &wsaData);
 
-    /* ƒ\ƒPƒbƒg‚Ìì¬ */
+    /* ã‚½ã‚±ãƒƒãƒˆã®ä½œæˆ */
     if ((srvSock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         printf("error:%d\n",WSAGetLastError());
     }
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         printf("error:%d\n",WSAGetLastError());
     }
 
-    /* Ú‘±æw’è—p\‘¢‘Ì‚Ì€”õ */
+    /* æ¥ç¶šå…ˆæŒ‡å®šç”¨æ§‹é€ ä½“ã®æº–å‚™ */
     server.sin_family = AF_INET;
     server.sin_port = htons(12345);
     server.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -45,19 +45,19 @@ int main(int argc, char *argv[])
     receiver.sin_addr.s_addr = INADDR_ANY;
     bind(lstnRecvSock, (struct sockaddr *)&receiver, sizeof(receiver));
 
-    /* ƒT[ƒo‚ÉÚ‘± */
+    /* ã‚µãƒ¼ãƒã«æ¥ç¶š */
     connect(srvSock, (struct sockaddr *)&server, sizeof(server));
 
-    /* ƒT[ƒo‚©‚çƒf[ƒ^‚ğóM */
+    /* ã‚µãƒ¼ãƒã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’å—ä¿¡ */
     memset(buf, 0, sizeof(buf));
     n = recv(srvSock, buf, sizeof(buf), 0);
 
     printf("%d, %s\n", n, buf);
 
-    /* socket‚ÌI—¹ */
+    /* socketã®çµ‚äº† */
 
     closesocket(srvSock);
-    // winsock2‚ÌI—¹
+    // winsock2ã®çµ‚äº†
     WSACleanup();
 
     return 0;

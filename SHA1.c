@@ -1,3 +1,4 @@
+//2022 ykh04
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,11 +11,11 @@
 #define DUMMY_ERROR                 -1
 
 int Nsha1(unsigned char *data, unsigned int size, unsigned int *SH0, unsigned int *SH1, unsigned int *SH2, unsigned int *SH3, unsigned int *SH4);
-void padding(unsigned int size, unsigned char *data, unsigned char *blocks, unsigned int BLOCKBYTES); /*ƒpƒfƒBƒ“ƒOŠÖ”i–ß‚èF‚È‚µ@ˆø”‚PFƒƒbƒZ[ƒWƒTƒCƒY@ˆø”‚QFƒƒbƒZ[ƒWƒf[ƒ^@ˆø”‚RFo—Í—p—ÌˆæƒAƒhƒŒƒX@ˆø”‚SF‘SƒuƒƒbƒN‚ÉŠÜ‚Ü‚ê‚é‘ƒoƒCƒg”j*/
+void padding(unsigned int size, unsigned char *data, unsigned char *blocks, unsigned int BLOCKBYTES); /*ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°é–¢æ•°ï¼ˆæˆ»ã‚Šï¼šãªã—ã€€å¼•æ•°ï¼‘ï¼šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚µã‚¤ã‚ºã€€å¼•æ•°ï¼’ï¼šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ‡ãƒ¼ã‚¿ã€€å¼•æ•°ï¼“ï¼šå‡ºåŠ›ç”¨é ˜åŸŸã‚¢ãƒ‰ãƒ¬ã‚¹ã€€å¼•æ•°ï¼”ï¼šå…¨ãƒ–ãƒ­ãƒƒã‚¯ã«å«ã¾ã‚Œã‚‹ç·ãƒã‚¤ãƒˆæ•°ï¼‰*/
 unsigned int sigma(int index, unsigned int word1, unsigned int word2, unsigned int word3);
 unsigned int rotL(int times, unsigned int word);
 
-static unsigned int K[80] = { /*’è”ƒ[ƒhƒV[ƒPƒ“ƒX*/ /*issue: ‚±‚¢‚Â‚ªfor‚Å‚Ç‚Ì‚æ‚¤‚Èˆµ‚í‚ê•û‚ğ‚µ‚Ä‚¢‚é‚©’²‚×‚é*/
+static unsigned int K[80] = { /*å®šæ•°ãƒ¯ãƒ¼ãƒ‰ã‚·ãƒ¼ã‚±ãƒ³ã‚¹*/ /*issue: ã“ã„ã¤ãŒforã§ã©ã®ã‚ˆã†ãªæ‰±ã‚ã‚Œæ–¹ã‚’ã—ã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹*/
     0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999,
     0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999, 0x5A827999,
     0x6ED9EBA1, 0x6ED9EBA1, 0x6ED9EBA1, 0x6ED9EBA1, 0x6ED9EBA1, 0x6ED9EBA1, 0x6ED9EBA1, 0x6ED9EBA1, 0x6ED9EBA1, 0x6ED9EBA1,
@@ -25,27 +26,27 @@ static unsigned int K[80] = { /*’è”ƒ[ƒhƒV[ƒPƒ“ƒX*/ /*issue: ‚±‚¢‚Â‚ªfor‚Å‚Ç‚
     0xCA62C1D6, 0xCA62C1D6, 0xCA62C1D6, 0xCA62C1D6, 0xCA62C1D6, 0xCA62C1D6, 0xCA62C1D6, 0xCA62C1D6, 0xCA62C1D6, 0xCA62C1D6
 };
 
-int Nsha1(unsigned char *data, unsigned int size, unsigned int *SH0, unsigned int *SH1, unsigned int *SH2, unsigned int *SH3, unsigned int *SH4) /*Šî–{“I‚ÉƒoƒCƒgƒf[ƒ^‚ğˆµ‚¤*/
+int Nsha1(unsigned char *data, unsigned int size, unsigned int *SH0, unsigned int *SH1, unsigned int *SH2, unsigned int *SH3, unsigned int *SH4) /*åŸºæœ¬çš„ã«ãƒã‚¤ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’æ‰±ã†*/
 {
-    unsigned int numOfBlocks, BLOCKBYTES, *wordBuf, j, k; /*ƒƒbƒZ[ƒW‚É‰‚¶‚Ä•Ï‰»‚·‚éƒuƒƒbƒN‚Ì”*/
-    unsigned char *blocks = NULL, wordBufchar[80 * BYTES_PER_WORD]; /*ƒƒbƒZ[ƒW‚É‰‚¶‚Ä“®“I‚ÉŠm•Û‚³‚ê‚éƒpƒfƒBƒ“ƒO—p‹óŠÔiƒ[ƒ‰Šú‰»‚³‚ê‚é‚Å‚ ‚ë‚¤j*/
+    unsigned int numOfBlocks, BLOCKBYTES, *wordBuf, j, k; /*ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«å¿œã˜ã¦å¤‰åŒ–ã™ã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã®æ•°*/
+    unsigned char *blocks = NULL, wordBufchar[80 * BYTES_PER_WORD]; /*ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã«å¿œã˜ã¦å‹•çš„ã«ç¢ºä¿ã•ã‚Œã‚‹ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°ç”¨ç©ºé–“ï¼ˆã‚¼ãƒ­åˆæœŸåŒ–ã•ã‚Œã‚‹ã§ã‚ã‚ã†ï¼‰*/
 
     unsigned int A, B, C, D, E, TEMP;
     unsigned int H0 = 0x67452301, H1 = 0xEFCDAB89, H2 = 0x98BADCFE, H3 = 0x10325476, H4 = 0xC3D2E1F0;
 
 
     if ((size % 64) < 56) {
-        numOfBlocks = size / (WORDS_PER_BLOCK * BYTES_PER_WORD) + 1; /*3ƒ[ƒh‚Ì—]—T‚ª‚ ‚éiƒTƒCƒY“™—pj*/
+        numOfBlocks = size / (WORDS_PER_BLOCK * BYTES_PER_WORD) + 1; /*3ãƒ¯ãƒ¼ãƒ‰ã®ä½™è£•ãŒã‚ã‚‹ï¼ˆã‚µã‚¤ã‚ºç­‰ç”¨ï¼‰*/
     }
     else {
-        numOfBlocks = size / (WORDS_PER_BLOCK * BYTES_PER_WORD) + 2; /*3ƒ[ƒh‚Ì—]—T‚ª‚È‚¢‚©‚ç‚à‚¤1ƒuƒƒbƒN‘‚â‚·*/
+        numOfBlocks = size / (WORDS_PER_BLOCK * BYTES_PER_WORD) + 2; /*3ãƒ¯ãƒ¼ãƒ‰ã®ä½™è£•ãŒãªã„ã‹ã‚‰ã‚‚ã†1ãƒ–ãƒ­ãƒƒã‚¯å¢—ã‚„ã™*/
     }
     /*============================
-        ƒuƒƒbƒN‚ÌŠm•Û
+        ãƒ–ãƒ­ãƒƒã‚¯ã®ç¢ºä¿
     ============================*/
     BLOCKBYTES = numOfBlocks * WORDS_PER_BLOCK * BYTES_PER_WORD;
-    blocks = calloc(BLOCKBYTES, sizeof(char)); /*“®“IŠm•Ûiƒ[ƒ‰Šú‰»j*/
-    if (blocks == NULL) {   /*ƒƒ‚ƒŠ[—e—Ê‚ª•s‘«‚µ‚Ä‚¢‚Ä—Ìˆæ‚ªŠm•Û‚Å‚«‚È‚©‚Á‚½iÅ‹ß‚Ìƒ}ƒVƒ“‚Å‚Í‚È‚¢‚Æv‚¤‚ªAˆê‰j*/
+    blocks = calloc(BLOCKBYTES, sizeof(char)); /*å‹•çš„ç¢ºä¿ï¼ˆã‚¼ãƒ­åˆæœŸåŒ–ï¼‰*/
+    if (blocks == NULL) {   /*ãƒ¡ãƒ¢ãƒªãƒ¼å®¹é‡ãŒä¸è¶³ã—ã¦ã„ã¦é ˜åŸŸãŒç¢ºä¿ã§ããªã‹ã£ãŸï¼ˆæœ€è¿‘ã®ãƒã‚·ãƒ³ã§ã¯ãªã„ã¨æ€ã†ãŒã€ä¸€å¿œï¼‰*/
         printf("\n\n");
         printf("ERROR: Lack of Memory Resource!!");
         return DUMMY_ERROR;
@@ -53,11 +54,11 @@ int Nsha1(unsigned char *data, unsigned int size, unsigned int *SH0, unsigned in
 
 
     /*============================
-        ƒpƒfƒBƒ“ƒO
+        ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°
     ============================*/
-    padding(size, data, blocks, BLOCKBYTES);    /*ƒpƒfƒBƒ“ƒOŠÖ”‚ğŒÄ‚Ño‚·*/
+    padding(size, data, blocks, BLOCKBYTES);    /*ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°é–¢æ•°ã‚’å‘¼ã³å‡ºã™*/
     /*============================
-        ŒvZ
+        è¨ˆç®—
     ============================*/
     for (j = 0; j < numOfBlocks; j++) {
         memset(wordBufchar, 0, sizeof(wordBufchar));
@@ -99,28 +100,28 @@ void padding(unsigned int size, unsigned char *data, unsigned char *blocks, unsi
 {
     int i;
     unsigned int bSize;
-    unsigned char *bitSize = NULL; /*ƒrƒbƒgƒTƒCƒY‚É’¼‚·‚½‚ß‚Ì”z—ñ*/
+    unsigned char *bitSize = NULL; /*ãƒ“ãƒƒãƒˆã‚µã‚¤ã‚ºã«ç›´ã™ãŸã‚ã®é…åˆ—*/
     bSize = size * 8;
 
-    memcpy(blocks, data, size); /*ƒpƒfƒBƒ“ƒO—Ìˆæ‚ÖƒRƒs[*/
-    memset(blocks + size, 0x80, 1); /*Œã‚ë‚É¯•Ê—pƒR[ƒh‚ğ‘}“üi0‚©‚çn‚Ü‚Á‚Ä‚é‚©‚ç‚±‚ê‚Å‚æ‚¢‚Ì‚¾j*/
+    memcpy(blocks, data, size); /*ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°é ˜åŸŸã¸ã‚³ãƒ”ãƒ¼*/
+    memset(blocks + size, 0x80, 1); /*å¾Œã‚ã«è­˜åˆ¥ç”¨ã‚³ãƒ¼ãƒ‰ã‚’æŒ¿å…¥ï¼ˆ0ã‹ã‚‰å§‹ã¾ã£ã¦ã‚‹ã‹ã‚‰ã“ã‚Œã§ã‚ˆã„ã®ã ï¼‰*/
 
-    bitSize = (unsigned char *)&bSize; /*32bit—Ìˆæ‚ğ8bit—Ìˆæ‚Åˆµ‚¤‚½‚ß*/
-    for (i = 0; i < 4; i++) { /*ƒŠƒgƒ‹ƒGƒ“ƒfƒBƒAƒ“‚ğƒrƒbƒOƒGƒ“ƒfƒBƒAƒ“‚É•ÏŠ·‚·‚é*/
+    bitSize = (unsigned char *)&bSize; /*32bité ˜åŸŸã‚’8bité ˜åŸŸã§æ‰±ã†ãŸã‚*/
+    for (i = 0; i < 4; i++) { /*ãƒªãƒˆãƒ«ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’ãƒ“ãƒƒã‚°ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã«å¤‰æ›ã™ã‚‹*/
         *(blocks + BLOCKBYTES - (i + 1)) = *(bitSize + i);
     }
 }
 
-/*---‘O’ñ---
+/*---å‰æ---
 
-[|]‚Íbit‚ÌOR‰‰Z‚ğ•\‚µ‚Ü‚·
-[&}‚Íbit‚ÌAND‰‰Z‚ğ•\‚µ‚Ü‚·
-[~]‚Íbit‚ÌNOT‰‰Z(1‚Ì•â”‚ğ‚Æ‚é‚Æ‚à)‚ğ•\‚µ‚Ü‚·¶
-[^]‚Íbit‚ÌXOR(”r‘¼“I˜_—˜a)‰‰Z‚ğ•\‚µ‚Ü‚·
-[<<][>>]‚Í‚»‚ê‚¼‚ê¶˜_—ƒVƒtƒgA‰E˜_—ƒVƒtƒg‚ğ•\‚µ‚Ü‚·i•„†‚È‚µ‚ª‘½‚¢i‚Æ‚¢‚¤‚©‘S•”j‚Ì‚ÅŠî–{˜_—ƒVƒtƒg‚Æ‚İ‚Ä‚æ‚¢j
+[|]ã¯bitã®ORæ¼”ç®—ã‚’è¡¨ã—ã¾ã™
+[&}ã¯bitã®ANDæ¼”ç®—ã‚’è¡¨ã—ã¾ã™
+[~]ã¯bitã®NOTæ¼”ç®—(1ã®è£œæ•°ã‚’ã¨ã‚‹ã¨ã‚‚)ã‚’è¡¨ã—ã¾ã™å·¦
+[^]ã¯bitã®XOR(æ’ä»–çš„è«–ç†å’Œ)æ¼”ç®—ã‚’è¡¨ã—ã¾ã™
+[<<][>>]ã¯ãã‚Œãã‚Œå·¦è«–ç†ã‚·ãƒ•ãƒˆã€å³è«–ç†ã‚·ãƒ•ãƒˆã‚’è¡¨ã—ã¾ã™ï¼ˆç¬¦å·ãªã—ãŒå¤šã„ï¼ˆã¨ã„ã†ã‹å…¨éƒ¨ï¼‰ã®ã§åŸºæœ¬è«–ç†ã‚·ãƒ•ãƒˆã¨ã¿ã¦ã‚ˆã„ï¼‰
 
-”õlF
-     C‚Ì32bit‘«‚µZ‚Í‚Q€‚Ì2^32‚Ì—]è‚Ì˜a
+å‚™è€ƒï¼š
+     Cã®32bitè¶³ã—ç®—ã¯ï¼’é …ã®2^32ã®ä½™å‰°ã®å’Œ
 ============================================================================*/
 
 unsigned int sigma(int index, unsigned int word1, unsigned int word2, unsigned int word3)
